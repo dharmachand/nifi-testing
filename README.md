@@ -4,8 +4,6 @@
 
 This is for Nifi Flow Unit Testing Framework and Tests
 #### Documentation
-* [Detailed Design](https://confluence.blackline.corp/display/IPT/Nifi+Flow+Unit+Testing)
-* [Comprehensive Nifi Testing](https://confluence.blackline.corp/display/IPT/NiFi+Comprehensive+Testing)
 * [NiPyApi - A Python Client SDK for Apache NiFi](https://nipyapi.readthedocs.io/en/latest/index.html)
 ### Developer Guide
 #### Local Development
@@ -35,7 +33,7 @@ Below are the steps for local setup to develop flow unit tests in python and run
          ```
 	* [Docker Desktop](https://www.docker.com/products/docker-desktop)
 * Run & Configure
-    * Nifi custom process nar file needs to be copied to docker/nifi-extensions folder whenever there is any update. Please checkout code from [nifi-extensions](https://stash.blackline.corp/projects/LINK/repos/blackline.nifi.extensions/browse?at=refs%2Fheads%2Fdev) and build nar.
+    * Nifi custom process nar file needs to be copied to docker/nifi-extensions folder whenever there is any update. 
       
       *Note: Temporarily, until certs are added to vault, one has to modify the VaultTransitClient.java with an additional header: (X-Vault-Token)*  
   ```       
@@ -48,11 +46,6 @@ Below are the steps for local setup to develop flow unit tests in python and run
          cd docker
          docker-compose up -d
         ``` 
-  * Steps to update NiFi flow with the latest from the DEV Environment
-    * The routing nifi flow file from the dev environment has to be edited locally to remove the following controller service
-    * Expand Routing Process group to access  DTS --> DTS Consumer Notifier Process group
-    * Right click on the canvas, select configure --> Controller Services --> Avro Reader Settings - set Schema Registry to No Value and then disable the service.
-    * Download the edited routing flow definition and overwrite the one in the docker/nifi-flows folder and include it in the PR
 
 #### Run Flow Unit Tests
 * Add Nifi self-signed certificates to KeyChain (Mac) or "Local Machine Certificate Store" (Windows), we have 2 options here
