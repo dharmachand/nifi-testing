@@ -110,7 +110,7 @@ Any of the following fields can be added to the 'settings' section of the test f
     "skip_replace_text_in": "true",
     "skip_check_out_content": "true",
     "subprocess": {
-        "before": "docker cp ../test-data/routing/getfile/getfile_tc01.txt nifi:/opt/nifi/simple.txt\"",
+        "before": "docker cp ../test-data/tc1.txt nifi:/opt/nifi/simple.txt\"",
         "after": "docker exec nifi rm /opt/nifi/simple.txt"
     }
 }
