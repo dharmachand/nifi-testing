@@ -1,0 +1,10 @@
+NIFI_HOSTNAME="nifi"
+NIFI_PORT="8443"
+VERIFY_SSL="True"
+NIFI_CERT_FILE="../docker/nifi-certs/nifi-cert.pem"
+NIFI_KEY_FILE="../docker/nifi-certs/nifi-key.key"
+NIFI_USERNAME="admin"
+NIFI_PASSWORD="NifiDev-0123456789"
+NIFI_REGISTRY_HOSTNAME="nifi-registry-ssl"
+NIFI_REGISTRY_PORT="18443"
+PYTHONPATH=../src:$PYTHONPATH

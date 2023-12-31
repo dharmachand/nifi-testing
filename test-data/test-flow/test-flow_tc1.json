@@ -1,0 +1,20 @@
+{
+	"input":{
+	  "attributes": {
+		  "att1":"att1_value",
+		  "att2":"att2_value"
+	  },
+	  "flow_content":{
+		"file_name": "test-flow_tc1_input.txt"
+	  }
+	},
+	"expected_output": {
+	  "attributes": {
+		  "att1": "att1_value",
+		  "test": "testing"
+	  },
+	  "flow_content": {
+	  	"file_name": "test-flow_tc1_output.txt"
+	  }
+	}
+}

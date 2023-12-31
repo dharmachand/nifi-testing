@@ -1,0 +1,44 @@
+[
+  {
+    "processor_type": "com.blackline.processors.ExtendedFetchSFTP",
+    "processor_name": null,
+    "properties": {
+      "Password": "${bl.step:jsonPath('$.ftp_password')}"
+    }
+  },
+  {
+    "processor_type": "com.blackline.processors.ExtendedPutSFTP",
+    "processor_name": null,
+    "properties": {
+      "Password": "${bl.step:jsonPath('$.ftp_password')}"
+    }
+  },
+  {
+    "processor_type": "com.blackline.processors.ExtendedListSFTP",
+    "processor_name": null,
+    "properties": {
+      "Password": "${bl.step:jsonPath('$.ftp_password')}"
+    }
+  },
+  {
+    "processor_type": "com.blackline.processors.ExtendedExecuteSQL",
+    "processor_name": null,
+    "properties": {
+      "Password": "${bl.step:jsonPath('$.db_password')}"
+    }
+  },
+  {
+    "processor_type": "com.blackline.processors.ExtendedPutSQL",
+    "processor_name": null,
+    "properties": {
+      "Password": "${bl.step:jsonPath('$.db_password')}"
+    }
+  },
+  {
+    "processor_type": "com.blackline.processors.ExtendedPutDatabaseRecord",
+    "processor_name": null,
+    "properties": {
+      "Password": "${bl.step:jsonPath('$.db_password')}"
+    }
+  }
+]

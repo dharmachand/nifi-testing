@@ -1,0 +1,124 @@
+---
+version: '3' 
+services:
+  nifi: 
+    build: .
+    hostname: nifi
+    container_name: nifi
+    depends_on:
+      - vault
+      - sftp
+      - wiremock
+    ports:
+      - "8443:8443"
+      - "9091:9091"
+      - "8000:8000"
+      - "8007:8007"
+    environment:
+      - NIFI_WEB_HTTPS_PORT=8443
+      - SINGLE_USER_CREDENTIALS_USERNAME=admin
+      - SINGLE_USER_CREDENTIALS_PASSWORD=NifiDev-0123456789
+      - NIFI_SENSITIVE_PROPS_KEY=testingNifi1234
+      - AUTH=tls
+      - KEYSTORE_PATH=/opt/certs/keystore.jks
+      - KEYSTORE_TYPE=JKS
+      - KEYSTORE_PASSWORD=BlD4q1rnQvaXNvzGX4f9oJRZojLXqyWk+GnzSA/ylZ4
+      - TRUSTSTORE_PATH=/opt/certs/truststore.jks
+      - TRUSTSTORE_TYPE=JKS
+      - TRUSTSTORE_PASSWORD=U/Gtu96AOni24iyQVwfofcsEmcDBJSf3TyKQpkHIMVU
+      - NIFI_SECURITY_USER_AUTHORIZER=single-user-authorizer
+      - NIFI_SECURITY_USER_LOGIN_IDENTITY_PROVIDER=single-user-provider
+    volumes:
+      - ./nifi-certs/keystore.jks:/opt/certs/keystore.jks
+      - ./nifi-certs/truststore.jks:/opt/certs/truststore.jks
+    links:
+      - sftp
+      - wiremock
+      - postgres
+
+  registry-ssl:
+    image: "apache/nifi-registry:1.15.3"
+    hostname: nifi-registry-ssl
+    container_name: nifi-registry-ssl
+    ports:
+      - "18443:18443"
+    environment:
+      - AUTH=tls
+      - KEYSTORE_PATH=/opt/certs/keystore.jks
+      - KEYSTORE_TYPE=JKS
+      - KEYSTORE_PASSWORD=BlD4q1rnQvaXNvzGX4f9oJRZojLXqyWk+GnzSA/ylZ4
+      - TRUSTSTORE_PATH=/opt/certs/truststore.jks
+      - TRUSTSTORE_TYPE=JKS
+      - TRUSTSTORE_PASSWORD=U/Gtu96AOni24iyQVwfofcsEmcDBJSf3TyKQpkHIMVU
+      - INITIAL_ADMIN_IDENTITY=CN=admin, OU=NiFi
+    volumes:
+      - ./nifi-certs/keystore.jks:/opt/certs/keystore.jks
+      - ./nifi-certs/truststore.jks:/opt/certs/truststore.jks
+      - ./registry-db-ssl:/opt/nifi-registry/nifi-registry-current/database
+      - ./registry-flow-ssl:/opt/nifi-registry/nifi-registry-current/flow_storage
+
+  vault:
+    image: "hashicorp/vault:1.13.3"
+    hostname: vault
+    container_name: vault
+    cap_add:
+      - IPC_LOCK
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200
+      - VAULT_API_ADDR=http://127.0.0.1:8200
+      - VAULT_SKIP_VERIFY=true
+    command: server --dev --dev-root-token-id="00000000-0000-0000-0000-000000000000"
+
+  sftp:
+    image: "atmoz/sftp:latest"
+    hostname: sftp
+    container_name: sftp
+    volumes:
+      - ./sftp/data:/home/foo/upload
+    ports:
+      - "2222:22"
+    # creating user foo and a directory /home/foo/upload
+    command: foo:pass:::upload
+
+  wiremock:
+    image: "wiremock/wiremock:latest"
+    hostname: wiremock
+    container_name: wiremock
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./wiremock/mappings:/home/wiremock/mappings
+      - ./wiremock/__files:/home/wiremock/__files
+    entrypoint: [ "/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose" ]
+
+  postgres:
+    image: postgres:14.1-alpine
+    hostname: postgres
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    hostname: sql-server
+    container_name: sql-server
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "Pass@word"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ./sql-server/data:/var/opt/mssql/data
+
+networks:
+  default:
+    name: nifi-network  

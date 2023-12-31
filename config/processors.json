@@ -1,0 +1,44 @@
+[
+  {
+    "name": "http_req_processor",
+    "type": "org.apache.nifi.processors.standard.HandleHttpRequest",
+    "location": "(500, 400)",
+    "config": "{\"properties\":{\"HTTP Context Map\":ctx_map.id,\"Allowed Paths\":\"/test\",\"Listening Port\":test_api_port}}"
+  },
+  {
+    "name": "in_mapper_processor",
+    "type": "org.apache.nifi.processors.attributes.UpdateAttribute",
+    "location": "(500, 600)",
+    "config": "{\"properties\":in_attribs}"
+  },
+  {
+    "name": "replace_text_in_processor",
+    "type": "org.apache.nifi.processors.standard.ReplaceText",
+    "location": "(500, 800)",
+    "config": "{\"properties\":{\"Replacement Value\":in_content_txt,\"Evaluation Mode\":\"Entire text\"},\"autoTerminatedRelationships\":[\"failure\"]}"
+  },
+  {
+    "name": "extract_content_processor",
+    "type": "org.apache.nifi.processors.standard.ExtractText",
+    "location": "(500, 1200)",
+    "config": "{\"properties\":{\"Maximum Capture Group Length\": \"1040200\", \"Enable Unix Lines Mode\": \"true\", \"test.content\": \"(?msu)(.*)\"}}"
+  },
+  {
+    "name": "check_expected_equals_content_processor",
+    "type": "org.apache.nifi.processors.standard.RouteOnAttribute",
+    "location": "(500, 1400)",
+    "config": "{\"properties\":{\"match\": \"${test.content:equals(${test.expected})}\"}}"
+  },
+  {
+    "name": "replace_text_out_processor",
+    "type": "org.apache.nifi.processors.standard.ReplaceText",
+    "location": "(500, 1600)",
+    "config": "{\"properties\":{\"Replacement Value\":json.dumps(report_json),\"Evaluation Mode\":\"Entire text\"},\"autoTerminatedRelationships\":[\"failure\"]}"
+  },
+  {
+    "name": "http_resp_processor",
+    "type": "org.apache.nifi.processors.standard.HandleHttpResponse",
+    "location": "(500, 1800)",
+    "config": "{\"properties\":{\"HTTP Context Map\":ctx_map.id,\"HTTP Status Code\":\"200\"},\"autoTerminatedRelationships\":[\"failure\",\"success\"]}"
+  }
+]
