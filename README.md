@@ -2,7 +2,8 @@
 ![alt text](readme_architecture.png) <br/>
 ![alt text](readme_sequence.png)
 
-This is for Nifi Flow Unit Testing Framework and Tests
+This is a Nifi Flow Testing Framework built upon NiPyApi, a Python client SDK for Apache NiFi. We can run flow tests without writing single line of code, regardless of the complexity of your data flow. Framework provides automation to run Nifi, Nifi Registry and all the dependent services in docker containers, deploy flow from Registry, setup test data, run the tests and clean-up the data.
+
 #### Documentation
 * [NiPyApi - A Python Client SDK for Apache NiFi](https://nipyapi.readthedocs.io/en/latest/index.html)
 ### Developer Guide
