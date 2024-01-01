@@ -88,9 +88,8 @@ Below are the steps for local setup to develop flow unit tests in python and run
       * Can proxy user requests - Read / Write / Delete
       * Bucket - Read / Write
     * Create bucket if not exists - "nifi-testing"
-    * Import sample routing flow from docker/nifi-flows/routing.json into the Nifi Registry
+    * Import sample flow from docker/nifi-flows/test-flow.json into the Nifi Registry
       * NiFi Registry Import URL: https://<local-nifi-registry-ssl-hostname:port>/nifi-registry/#/explorer/grid-list
-      * ![img.png](registry_import_flow.png)
     * Update flow_version_mapping (routing version) in test.properties to match the local NiFi Registry Flow version (Refer above screenshot for versions)  
 
 * Run Nifi Flow python test script
